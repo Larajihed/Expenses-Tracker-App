@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +12,22 @@ using stouchi.Dtos;
 using stouchi.Models;
 using stouchi.Services;
 
+
 namespace stouchi.Controllers
 {
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Route("[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly ApplicationDbContext _context;
+
+        public AccountController(IAccountService accountService, ApplicationDbContext context)
         {
             _accountService = accountService;
+            _context = context;
+
         }
 
         [Route("login-token")]
@@ -53,6 +60,17 @@ namespace stouchi.Controllers
             }
             return Ok(tokens);
         }
+        [EnableCors("AllowOrigin")]
+        [HttpPost]
+        [Route("register")]
+
+        public async Task<IActionResult> CreateUser(User user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
 
     }
 }

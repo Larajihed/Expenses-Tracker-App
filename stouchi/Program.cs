@@ -8,6 +8,7 @@ using System.Text;
 //using stouchi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -16,7 +17,15 @@ builder.Services
 .Configure<TokenSettings>(builder.Configuration.GetSection("TokenSettings"));
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAccountService, AccountService>();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:19008",
+                                              "http://www.contoso.com");
+                      });
+});
 builder
 .Services
 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -54,6 +63,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 

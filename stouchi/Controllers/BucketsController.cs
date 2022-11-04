@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,15 @@ namespace stouchi.Controllers
         {
             _context = context;
         }
+        //[Authorize]
+        [HttpGet]
+        [Route("get-balance")]
+        public float GetBalance()
+        {
 
+            var Values = _context.Buckets.Where(b => b.Value > 0).Select(b => b.Value).Sum();
+            return Values;
+        }
         // GET: api/Buckets
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Bucket>>> GetBuckets()

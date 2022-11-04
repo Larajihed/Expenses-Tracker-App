@@ -14,14 +14,20 @@ namespace stouchi.Services
 {
     public class AccountService : IAccountService
     {
+
         private readonly ApplicationDbContext _myAuthContext;
         private readonly TokenSettings _tokenSettings;
+
+
         public AccountService(ApplicationDbContext myAuthContext,
         IOptions<TokenSettings> tokenSettings)
         {
             _myAuthContext = myAuthContext;
             _tokenSettings = tokenSettings.Value;
         }
+
+
+		//Function to create JWT Token & return the token
 		private string CreateJwtToken(User user)
 		{
 			var symmetricSecurityKey = new SymmetricSecurityKey(
@@ -33,7 +39,7 @@ namespace stouchi.Services
 			);
 
 			var userCliams = new Claim[]{
-		new Claim("email", user.Email),
+			new Claim("email", user.Email),
 	};
 
 			var jwtToken = new JwtSecurityToken(
@@ -47,7 +53,6 @@ namespace stouchi.Services
 			string token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 			return token;
 		}
-
 
 
 		public async Task<TokenDto> GetAuthTokens(LoginDto login)

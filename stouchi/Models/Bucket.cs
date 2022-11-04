@@ -9,6 +9,7 @@ namespace stouchi.Models
         public int BucketId { get; set; }
         public string Name { get; set; }
         public Currency Currency { get; set; }
+        public float Value { get; set; }
 
         public int UserId { get; set; }
         [NotMapped]
