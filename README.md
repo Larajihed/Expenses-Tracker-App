@@ -56,7 +56,6 @@ dotnet run
 
 ## API Endpoints
 The following API endpoints are available for managing expenses:
-
 GET /api/expenses: Retrieve a list of all expenses.
 GET /api/expenses/{id}: Retrieve details of a specific expense.
 POST /api/expenses: Create a new expense.
